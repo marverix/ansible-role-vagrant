@@ -1,0 +1,12 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+
+  - name: Check Vagrant version
+    command: "vagrant --version"
+    register: test
+
+  - name: Assert result
+    assert:
+      that: "'Vagrant' in test.stdout"
