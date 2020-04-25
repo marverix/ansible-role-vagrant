@@ -1,8 +1,8 @@
 # Ansible Role: Vagrant
 
 [![Build Status](https://travis-ci.com/marverix/ansible-role-vagrant.svg?branch=master)](https://travis-ci.com/marverix/ansible-role-vagrant)
-![Ansible Quality Score](https://img.shields.io/ansible/quality/47511)
-![Ansible Role](https://img.shields.io/ansible/role/47511)
+![Ansible Quality Score](https://img.shields.io/ansible/quality/48205)
+![Ansible Role](https://img.shields.io/ansible/role/48205)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
 Ansible role that installs Vagrant on Linux.
