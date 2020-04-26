@@ -10,6 +10,7 @@ Ansible role that installs Vagrant on Linux.
 ## Features
 
 - ✔️ Installing Vagrant
+  - Does the package's checksum check
   - You can define which version should be installed
   - Skips if requested version is already installed
 - ✔️ Tested with Molecule Verify
@@ -29,6 +30,7 @@ None
 Variable | Description | Default Value
 --- | --- | ---
 `vagrant_version` | Version of Vagrant to be installed | `2.2.7`
+`vagrant_package_checksum` | SHA256 checksums for packages | *checksums for 2.2.7 version*
 
 ## Dependencies
 
@@ -43,7 +45,6 @@ None
     - hosts: all
       roles:
         - marverix.vagrant
-
     ```
 
 1. Install Vagrant 2.2.2
@@ -55,6 +56,9 @@ None
         - role: marverix.vagrant
           vars:
             vagrant_version: 2.2.2
+            vagrant_package_checksum:
+              deb: 4dec711612c4350733e01745ab9f5acee2fbf9756ab9728b19a4664cae5c275d
+              rpm: 1826ff2220951766b65d549f3e6e38f1eb07ff0b4c66197582b1ce62f9104035
     ```
 
     Note: Here is a list of all released Vagrant versions https://releases.hashicorp.com/vagrant/

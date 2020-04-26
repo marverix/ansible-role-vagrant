@@ -25,6 +25,7 @@
       get_url:
         url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_install_ext }}"
         dest: "{{ vagrant_install_tmp }}.{{ vagrant_install_ext }}"
+        checksum: "sha256:{{ vagrant_package_checksum[vagrant_install_ext] }}"
 
     - name: Install package (Ubuntu)
       when: ansible_distribution == 'Ubuntu'
