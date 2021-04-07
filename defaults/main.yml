@@ -1,10 +1,10 @@
 ---
 # List of available versions is here:
 # https://releases.hashicorp.com/vagrant/
-vagrant_version: 2.2.7
+vagrant_version: 2.2.15
 
 # You can checksums here:
-# https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_SHA256SUMS
+# https://releases.hashicorp.com/vagrant/2.2.15/vagrant_2.2.15_SHA256SUMS
 vagrant_package_checksum:
-  deb: 33ef5c874d28e424fa93d86c0d6d5e2e5817183995e34d9ed67e527a2aee854d
-  rpm: 5405a1e655ff6a9e52d45464320491494df7e9648740f1dada357cd64884dc78
+  deb: 45d82f7a5b8d2d1ec7145a01931832b8c1990f2e9125a63c01accf30d87e20a2
+  rpm: a32c4f6cfe75d6073b0490121a5d4b908ea87ba2eaed02eebbb93f3d4b500872

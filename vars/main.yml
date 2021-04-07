@@ -1,2 +1,4 @@
 ---
-vagrant_install_tmp: /tmp/vagrant-install
+vagrant_package_ext:
+  Ubuntu: deb
+  CentOS: rpm

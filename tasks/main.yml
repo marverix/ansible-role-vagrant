@@ -10,29 +10,32 @@
   when: test.msg is defined or
     not (test.stdout | regex_search('^Vagrant ' + vagrant_version | string))
   block:
-
-    - name: Set extension for Ubuntu
-      when: ansible_distribution == 'Ubuntu'
+  
+    - name: Set package name
       set_fact:
-        vagrant_install_ext: deb
+        vagrant_package_name: "vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_package_ext[ansible_distribution] }}"
 
-    - name: Set extension for CentOS
-      when: ansible_distribution == 'CentOS'
+    - name: Set package path
       set_fact:
-        vagrant_install_ext: rpm
+        vagrant_package_path: "/tmp/{{ vagrant_package_name }}"
 
     - name: Download the file
       get_url:
-        url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_install_ext }}"
-        dest: "{{ vagrant_install_tmp }}.{{ vagrant_install_ext }}"
-        checksum: "sha256:{{ vagrant_package_checksum[vagrant_install_ext] }}"
+        url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/{{ vagrant_package_name }}"
+        dest: "{{ vagrant_package_path }}"
+        checksum: "sha256:{{ vagrant_package_checksum[vagrant_package_ext[ansible_distribution]] }}"
 
     - name: Install package (Ubuntu)
       when: ansible_distribution == 'Ubuntu'
       apt:
-        deb: "{{ vagrant_install_tmp }}.{{ vagrant_install_ext }}"
+        deb: "{{ vagrant_package_path }}"
 
     - name: Install package (CentOS)
       when: ansible_distribution == 'CentOS'
       yum:
-        name: "{{ vagrant_install_tmp }}.{{ vagrant_install_ext }}"
+        name: "{{ vagrant_package_path }}"
+
+    - name: Cleaning
+      file:
+        path: "{{ vagrant_package_path }}"
+        state: absent

@@ -19,6 +19,7 @@ Ansible role that installs Vagrant on Linux.
 
 - ✔️ Ubuntu 16.04 (Xenial)
 - ✔️ Ubuntu 18.04 (Bionic)
+- ✔️ Ubuntu 20.04 (Focal)
 - ✔️ CentOS 7
 
 ## Requirements
@@ -29,8 +30,8 @@ None
 
 Variable | Description | Default Value
 --- | --- | ---
-`vagrant_version` | Version of Vagrant to be installed | `2.2.7`
-`vagrant_package_checksum` | SHA256 checksums for packages | *checksums for 2.2.7 version*
+`vagrant_version` | Version of Vagrant to be installed | `2.2.15`
+`vagrant_package_checksum` | SHA256 checksums for packages | *checksums for 2.2.15 version*
 
 ## Dependencies
 
