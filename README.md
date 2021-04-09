@@ -12,7 +12,6 @@ Ansible role that installs Vagrant on Linux.
 - ✔️ Installing Vagrant
   - Does the package's checksum check
   - You can define which version should be installed
-  - Skips if requested version is already installed
 - ✔️ Tested with Molecule Verify
 
 ## Supported Platforms

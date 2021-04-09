@@ -1,41 +1,63 @@
 ---
-- name: Check if Vagrant is already installed
-  command: "vagrant --version"
-  register: test
-  ignore_errors: yes
-  failed_when: no
-  changed_when: yes
+- name: Set package name
+  set_fact:
+    vagrant_package_name: "vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_package_ext[ansible_distribution] }}"
 
-- name: Installation block
-  when: test.msg is defined or
-    not (test.stdout | regex_search('^Vagrant ' + vagrant_version | string))
+- name: Set package path
+  set_fact:
+    vagrant_package_path: "/tmp/{{ vagrant_package_name }}"
+
+- name: Download the file
+  get_url:
+    url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/{{ vagrant_package_name }}"
+    dest: "{{ vagrant_package_path }}"
+    checksum: "sha256:{{ vagrant_package_checksum[vagrant_package_ext[ansible_distribution]] }}"
+  register: response
+  changed_when: "response.status_code != 200"
+
+- name: Ubuntu support
+  when: ansible_distribution == 'Ubuntu'
   block:
-  
-    - name: Set package name
-      set_fact:
-        vagrant_package_name: "vagrant_{{ vagrant_version }}_x86_64.{{ vagrant_package_ext[ansible_distribution] }}"
 
-    - name: Set package path
-      set_fact:
-        vagrant_package_path: "/tmp/{{ vagrant_package_name }}"
+  - name: Uninstall existing package
+    apt:
+      name: vagrant
+      state: absent
+    changed_when: false
 
-    - name: Download the file
-      get_url:
-        url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/{{ vagrant_package_name }}"
-        dest: "{{ vagrant_package_path }}"
-        checksum: "sha256:{{ vagrant_package_checksum[vagrant_package_ext[ansible_distribution]] }}"
+  - name: Add gpg key
+    apt_key:
+      url: https://apt.releases.hashicorp.com/gpg
 
-    - name: Install package (Ubuntu)
-      when: ansible_distribution == 'Ubuntu'
-      apt:
-        deb: "{{ vagrant_package_path }}"
+  - name: Install package
+    apt:
+      deb: "{{ vagrant_package_path }}"
+    changed_when: false
 
-    - name: Install package (CentOS)
-      when: ansible_distribution == 'CentOS'
-      yum:
-        name: "{{ vagrant_package_path }}"
+- name: CentOS support
+  when: ansible_distribution == 'CentOS'
+  block:
 
-    - name: Cleaning
-      file:
-        path: "{{ vagrant_package_path }}"
-        state: absent
+  - name: Uninstall existing package
+    yum:
+      name: vagrant
+      state: absent
+    changed_when: false
+
+  - name: Add gpg key
+    rpm_key:
+      key: https://rpm.releases.hashicorp.com/gpg
+
+  - name: Install package
+    when: ansible_distribution == 'CentOS'
+    yum:
+      name: "{{ vagrant_package_path }}"
+      disable_gpg_check: yes
+    changed_when: false
+
+- name: Clean
+  file:
+    path: "{{ vagrant_package_path }}"
+    state: absent
+  register: result
+  changed_when: "result.diff.before.state != 'file' or result.diff.after.state != 'absent'"
